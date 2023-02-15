@@ -41,8 +41,10 @@ print(f"Battery level is {drone.get_battery()}%")
 drone.streamon()
 camera = drone.get_frame_read()
 
-# show video by looping and showing frame by frame (animation style)
-# this should be in a separate thread so that you can still control the 
+# Show video by looping and showing frame by frame (animation style)
+# Notice that we can't do anything else except take video... if we want the
+#   drone to do some thing else while taking video, we'll need to use threads
+
 cv2.namedWindow("Drone Video Feed")
 frame_counter = 0
 while frame_counter < 3000:
