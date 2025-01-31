@@ -259,11 +259,12 @@ if __name__ == '__main__':
 
     for filename in image_files:
     
-        time_start = time.time()
-
         img = cv2.imread(filename)
-        img, objs = process_image(img, dnn_object, confidence, threshold)
-        
+        if img is None or not isinstance(img, np.ndarray):
+            continue
+
+        time_start = time.time()
+        img, objs = process_image(img, dnn_object, confidence, threshold)        
         time_end = time.time()
         time_elapsed = time_end - time_start
 
