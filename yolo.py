@@ -83,8 +83,8 @@ def load_yolo_deep_neural_network():
 
 
     # Download weights: wget https://pjreddie.com/media/files/yolov3.weights
-    # Download coco.names: wget https://github.com/pjreddie/darknet/blob/master/data/coco.names
-    # Download yolov3.cfg: wget https://github.com/pjreddie/darknet/blob/master/cfg/yolov3.cfg
+    # Download coco.names: wget https://raw.githubusercontent.com/pjreddie/darknet/refs/heads/master/data/coco.names
+    # Download yolov3.cfg: wget https://raw.githubusercontent.com/pjreddie/darknet/refs/heads/master/cfg/yolov3.cfg
     labels_path = f'coco.names'
     config_path = f'yolov3.cfg'
     weights_path = f'yolov3.weights'
@@ -217,6 +217,21 @@ def process_image(img, dnn_object, confidence, threshold):
 
 if __name__ == '__main__':
 
+    # Command line parameters must be an image file or a dir containing images
+
+    if len(sys.argv) < 2:
+        print(f"Error: missing filename")
+        print(f"Usage: python {sys.argv[0]} <file>")
+        exit()
+    file_arg = sys.argv[1]
+    if not os.path.exists(file_arg):
+        print(f"Error: '{file_arg}' does not exist")
+        exit()
+    if os.path.isfile(file_arg):
+        image_files = [file_arg]
+    else:
+        image_files = [f"{file_arg}/{name}" for name in os.listdir(file_arg)]
+
     # Load a pre-trained Deep Neural Network to detect persons (and some 79 
     # other) contained in an image.
 
@@ -232,21 +247,6 @@ if __name__ == '__main__':
 
     confidence = 0.90
     threshold = 0.3
-
-    # Command line parameters must be an image file or a dir containing images
-
-    if len(sys.argv) < 2:
-        print(f"Error: missing filename")
-        print(f"Usage: python {sys.argv[0]} <file>")
-        exit()
-    file_arg = sys.argv[1]
-    if not os.path.exists(file_arg):
-        print(f"Error: '{file_arg}' does not exist")
-        exit()
-    if os.path.isfile(file_arg):
-        image_files = [file_arg]
-    else:
-        image_files = [f"{file_arg}/{name}" for name in os.listdir(file_arg)]
 
     # Run through each image file one a time:
     #  1. Detect the person objects in the image
